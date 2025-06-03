@@ -44,9 +44,9 @@ public class VjezbaBaza {
                 case 2:
                     izmijeniDrzavu(scanner);
                     break;
-//                case 3:
-//                    obrisiDrzavu(scanner);
-//                    break;
+                case 3:
+                    obrisiDrzavu(scanner);
+                    break;
 //                case 4:
 //                    prikaziSveDrzave();
 //                    break;
@@ -125,6 +125,32 @@ public class VjezbaBaza {
             int redova = ps.executeUpdate();
             if (redova > 0) {
                 System.out.println("Država je uspješno ažurirana.");
+            } else {
+                System.out.println("Država s tim ID-em ne postoji.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Greška u bazi: " + e.getMessage());
+        }
+    }
+
+    private static void obrisiDrzavu(Scanner scanner) {
+        System.out.print("Unesite ID države za brisanje: ");
+        String idUnos = scanner.nextLine().trim();
+        int id;
+        try {
+            id = Integer.parseInt(idUnos);
+        } catch (NumberFormatException e) {
+            System.out.println("Nevažeći ID.");
+            return;
+        }
+
+        String sqlDeleteCountry = "DELETE FROM Drzava WHERE idDrzava = ?";
+        try (Connection conn = createDataSource().getConnection()){
+            PreparedStatement ps = conn.prepareStatement(sqlDeleteCountry);
+            ps.setInt(1, id);
+            int redova = ps.executeUpdate();
+            if (redova > 0) {
+                System.out.println("Država je uspješno obrisana.");
             } else {
                 System.out.println("Država s tim ID-em ne postoji.");
             }
