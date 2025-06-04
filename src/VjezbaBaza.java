@@ -47,9 +47,9 @@ public class VjezbaBaza {
                 case 3:
                     obrisiDrzavu(scanner);
                     break;
-//                case 4:
-//                    prikaziSveDrzave();
-//                    break;
+                case 4:
+                    prikaziSveDrzave();
+                    break;
                 case 5:
                     System.out.println("Kraj programa. Doviđenja!");
                     scanner.close();
@@ -156,6 +156,24 @@ public class VjezbaBaza {
             }
         } catch (SQLException e) {
             System.out.println("Greška u bazi: " + e.getMessage());
+        }
+    }
+
+    private static void prikaziSveDrzave() {
+        String sqlSelectAllCountries = "SELECT idDrzava, Naziv FROM Drzava ORDER BY Naziv ASC";
+        try (Connection conn = createDataSource().getConnection()){
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sqlSelectAllCountries);
+
+            System.out.println("\n--- SVE DRŽAVE U BAZI ISPISANE ABECEDNIM REDOM ---");
+            while (rs.next()) {
+                int id = rs.getInt("idDrzava");
+                String naziv = rs.getString("Naziv");
+                System.out.printf("%3d  %s%n", id, naziv);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Greška pri dohvaćanju podataka: " + e.getMessage());
         }
     }
 }
